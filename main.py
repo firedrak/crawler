@@ -58,7 +58,7 @@ async def fetching():
         page_left = (redisClient.length_of_queue('page_queue'))
         if job_left:
             asyncio.create_task(push_page(redisClient.redis_pop('job_queue')))
-        await asyncio.sleep(0.2)
+        await asyncio.sleep(0.5)
 
     # await session.close()  
 
