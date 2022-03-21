@@ -7,7 +7,7 @@ OUT_PUT_FILE_NAME = 'dataCollected.csv'
 
 class redisCli:
 
-    redis_host = 'localhost'
+    redis_host = '192.168.56.101'
     redis_port = 6379
 
     REDIS_CLI = redis.StrictRedis(
