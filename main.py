@@ -32,7 +32,10 @@ async def extracting():
     while redisClient.get_status() == 'running':
         page_left = (redisClient.length_of_queue('page_queue'))
         if page_left:
-            page = redisClient.redis_pop('page_queue')
+            try:
+                page = redisClient.redis_pop('page_queue')
+            except:
+                page = None
             if page:
                 redisClient.incr_process_count()
                 process_page(page)
