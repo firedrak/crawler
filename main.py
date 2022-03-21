@@ -30,7 +30,6 @@ def process_page(page):
 
 async def extracting():
     while redisClient.get_status() == 'running':
-        job_left = (redisClient.length_of_queue('job_queue'))
         page_left = (redisClient.length_of_queue('page_queue'))
         if page_left:
             page = redisClient.redis_pop('page_queue')
@@ -55,7 +54,6 @@ async def fetching():
 
     while redisClient.get_status() == 'running':
         job_left = (redisClient.length_of_queue('job_queue'))
-        page_left = (redisClient.length_of_queue('page_queue'))
         if job_left:
             asyncio.create_task(push_page(redisClient.redis_pop('job_queue')))
         await asyncio.sleep(0.5)
