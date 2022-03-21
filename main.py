@@ -66,6 +66,7 @@ async def main():
     
     fetching_routine = asyncio.ensure_future(fetching())
     extracting_routine = asyncio.ensure_future(extracting())
+    quit()
     
     while redisClient.get_status() == 'running':
 
