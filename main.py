@@ -33,9 +33,10 @@ async def extracting():
         page_left = (redisClient.length_of_queue('page_queue'))
         if page_left:
             page = redisClient.redis_pop('page_queue')
-            redisClient.incr_process_count()
-            process_page(page)
-            redisClient.dicr_process_count()
+            if page:
+                redisClient.incr_process_count()
+                process_page(page)
+                redisClient.dicr_process_count()
         await asyncio.sleep(.1)
 
 async def fetching():
