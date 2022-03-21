@@ -29,7 +29,7 @@ class redisCli:
         self.REDIS_CLI.lpush(key, json.dumps(value))
 
     def redis_pop(self, key):
-        return json.loads(self.REDIS_CLI.lpop(key))
+        return json.loads(self.REDIS_CLI.rpop(key))
 
     def incr_process_count(self):
         self.REDIS_CLI.incr('process')
