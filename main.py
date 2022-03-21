@@ -37,7 +37,7 @@ async def extracting():
             redisClient.incr_process_count()
             process_page(page)
             redisClient.dicr_process_count()
-        await asyncio.sleep(.01)
+        await asyncio.sleep(.1)
 
 async def fetching():
 
