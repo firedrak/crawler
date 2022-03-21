@@ -37,7 +37,7 @@ async def extracting():
             redisClient.incr_process_count()
             process_page(page)
             redisClient.dicr_process_count()
-        await asyncio.sleep(.1)
+        await asyncio.sleep(.01)
 
 async def fetching():
 
@@ -66,7 +66,6 @@ async def main():
     
     fetching_routine = asyncio.ensure_future(fetching())
     extracting_routine = asyncio.ensure_future(extracting())
-    quit()
     
     while redisClient.get_status() == 'running':
 
