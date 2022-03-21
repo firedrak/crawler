@@ -47,7 +47,7 @@ if args:
     doc = (requests.get(url).text)
 
 def first_job():
-    with open('template.py', 'w') as f:
+    with open('crawler/template.py', 'w') as f:
         f.write(doc)
 
     import template
