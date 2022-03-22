@@ -9,7 +9,7 @@ OUT_PUT_FILE_NAME = 'dataCollected.csv'
 args = sys.argv[1:]
 if args:
     redis_host = args[0]
-    if args[1]
+    if args[1]:
         url = args[1]
 
 class redisCli:
