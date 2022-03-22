@@ -49,10 +49,6 @@ class redisCli:
 
     def get_process_count(self):
         return self.REDIS_CLI.get('process')
-    
-    def add_visited_url(self):
-        self.REDIS_CLI.
-
 
 def first_job():
     int_job = {'url' : template.STARTING_URL, 'call_back' : 'pars'}
