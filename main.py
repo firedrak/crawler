@@ -66,7 +66,7 @@ async def fetching():
         await asyncio.sleep(1)
         redisClient.dicr_process_count()
 
-#     await session.close()  
+    await session.close()  
 
 async def main():
     
