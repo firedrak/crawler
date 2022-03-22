@@ -51,19 +51,18 @@ async def fetching():
     
     async def push_page(job):
         url = job['url']
-        async with semaphore:
-            async with session.get(url, ssl=False) as response:
-                doc = await response.text()
-                redisClient.redis_push('page_queue', {'content':doc, 'call_back':job['call_back']})
-
+        try:
+            async with semaphore:
+                async with session.get(url, ssl=False) as response:
+                    doc = await response.text()
+                    redisClient.redis_push('page_queue', {'content':doc, 'call_back':job['call_back']})
+        except: print('404')
+            
     while redisClient.get_status() == 'running':
         redisClient.incr_process_count()
         job_left = (redisClient.length_of_queue('job_queue'))
         if job_left:
-            try:
-                asyncio.create_task(push_page(redisClient.redis_pop('job_queue')))
-            except:
-                print('404')
+            asyncio.create_task(push_page(redisClient.redis_pop('job_queue')))
         await asyncio.sleep(1)
         redisClient.dicr_process_count()
 
