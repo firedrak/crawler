@@ -6,9 +6,16 @@ import httpimport
 
 OUT_PUT_FILE_NAME = 'dataCollected.csv'
 
+args = sys.argv[1:]
+if args:
+    redis_host = args[0]
+    if args[1]
+        url = args[1]
+
 class redisCli:
 
-    redis_host = '192.168.56.101'
+#     redis_host = '192.168.56.101'
+    redis_host = redis_host
     redis_port = 6379
 
     REDIS_CLI = redis.StrictRedis(
@@ -43,9 +50,6 @@ class redisCli:
 
 
 def first_job():
-    args = sys.argv[1:]
-    if args:
-        url = args[0]
         with httpimport.remote_repo(["template"], url):
             import template
     
