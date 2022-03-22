@@ -18,17 +18,19 @@ redisClient.start_crawling()
 
 conn = aiohttp.TCPConnector(limit_per_host=100, limit=0, ttl_dns_cache=300)
 
-def process_page(page):
-    doc = BeautifulSoup(page['content'], 'html.parser')
-    fun_to_call = getattr(template, page['call_back'])
-    result = fun_to_call(doc)
-    if 'data' in result.keys() and len(result['data']):
-        redisClient.redis_push('data', result['data'])
-    if 'url' in result.keys() and len(result['url']):
-        for job in result['url']:
-            redisClient.redis_push('job_queue', job)
-
 async def extracting():
+# Processing pages in redis queue for data and urls.
+
+    def process_page(page):
+        doc = BeautifulSoup(page['content'], 'html.parser')
+        fun_to_call = getattr(template, page['call_back'])
+        result = fun_to_call(doc)
+        if 'data' in result.keys() and len(result['data']):
+            redisClient.redis_push('data', result['data'])
+        if 'url' in result.keys() and len(result['url']):
+            for job in result['url']:
+                redisClient.redis_push('job_queue', job)
+
     while redisClient.get_status() == 'running':
         page_left = (redisClient.length_of_queue('page_queue'))
         if page_left:
@@ -43,7 +45,7 @@ async def extracting():
         await asyncio.sleep(.1)
 
 async def fetching():
-
+# Downloading pages and pushing it to redis queue
     semaphore = asyncio.Semaphore(50)
     session = aiohttp.ClientSession(connector=conn)
     
