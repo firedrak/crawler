@@ -65,8 +65,9 @@ async def fetching():
             except:
                 print('404')
             await asyncio.sleep(1)
-            redisClient.dicr_process_count() 
-        await asyncio.sleep(.1)
+            redisClient.dicr_process_count()
+            continue
+        await asyncio.sleep(1)
 
 #     await session.close()  
 
