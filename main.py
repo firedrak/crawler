@@ -64,7 +64,7 @@ async def fetching():
             asyncio.create_task(push_page(redisClient.redis_pop('job_queue')))
         await asyncio.sleep(1)
 
-    # await session.close()  
+    await session.close()  
 
 async def main():
     
