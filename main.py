@@ -32,8 +32,8 @@ async def extracting():
                 redisClient.redis_push('job_queue', job)
 
     while redisClient.get_status() == 'running':
-        page_left = (redisClient.length_of_queue('page_queue'))
         redisClient.incr_process_count()
+        page_left = (redisClient.length_of_queue('page_queue'))
         if page_left:
             try:
                 page = redisClient.redis_pop('page_queue')
@@ -41,8 +41,8 @@ async def extracting():
                 page = None
             if page:
                 process_page(page)
-        redisClient.dicr_process_count()
         await asyncio.sleep(.1)
+        redisClient.dicr_process_count()
 
 async def fetching():
 # Downloading pages and pushing it to redis queue
@@ -57,16 +57,15 @@ async def fetching():
                 redisClient.redis_push('page_queue', {'content':doc, 'call_back':job['call_back']})
 
     while redisClient.get_status() == 'running':
+        redisClient.incr_process_count()
         job_left = (redisClient.length_of_queue('job_queue'))
         if job_left:
-            redisClient.incr_process_count()
             try:
                 asyncio.create_task(push_page(redisClient.redis_pop('job_queue')))
-                redisClient.dicr_process_count()
             except:
                 print('404')
-                redisClient.dicr_process_count()
         await asyncio.sleep(1)
+        redisClient.dicr_process_count()
 
 #     await session.close()  
 
