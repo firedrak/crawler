@@ -1,6 +1,7 @@
 import requests
 import redis
 import json, sys
+import httpimport
 # from 'https://github.com/firedrak/spider.git' import template
 
 OUT_PUT_FILE_NAME = 'dataCollected.csv'
@@ -41,16 +42,12 @@ class redisCli:
         return self.REDIS_CLI.get('process')
 
 
-args = sys.argv[1:]
-if args:
-    url = args[0]
-    doc = (requests.get(url).text)
-
 def first_job():
-    with open('template.py', 'w') as f:
-        f.write(doc)
-
-    import template
+    args = sys.argv[1:]
+    if args:
+        url = args[0]
+        with httpimport.remote_repo(["template"], url):
+            import template
     
     int_job = {'url' : template.STARTING_URL, 'call_back' : 'pars'}
     redisCli().redis_push('job_queue', int_job)
