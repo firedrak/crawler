@@ -66,7 +66,7 @@ async def fetching():
         await asyncio.sleep(1)
         redisClient.dicr_process_count()
 
-    await session.close()  
+#     await session.close()  
 
 async def main():
     
@@ -77,6 +77,7 @@ async def main():
 
         await asyncio.sleep(1)
         if redisClient.length_of_queue('job_queue') == 0 and redisClient.length_of_queue('page_queue') == 0:
+            await asyncio.sleep(.5)
             if redisClient.get_process_count() == '0':
                 redisClient.stop_crawling()
 
