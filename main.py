@@ -62,11 +62,10 @@ async def fetching():
             redisClient.incr_process_count()
             try:
                 asyncio.create_task(push_page(redisClient.redis_pop('job_queue')))
+                redisClient.dicr_process_count()
             except:
                 print('404')
-            await asyncio.sleep(1)
-            redisClient.dicr_process_count()
-            continue
+                redisClient.dicr_process_count()
         await asyncio.sleep(1)
 
 #     await session.close()  
