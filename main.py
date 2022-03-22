@@ -41,8 +41,8 @@ async def extracting():
                 page = None
             if page:
                 process_page(page)
-        await asyncio.sleep(.1)
         redisClient.dicr_process_count()
+        await asyncio.sleep(.1)
 
 async def fetching():
 # Downloading pages and pushing it to redis queue
@@ -63,8 +63,8 @@ async def fetching():
         job_left = (redisClient.length_of_queue('job_queue'))
         if job_left:
             asyncio.create_task(push_page(redisClient.redis_pop('job_queue')))
-        await asyncio.sleep(1)
         redisClient.dicr_process_count()
+        await asyncio.sleep(1)
 
 #     await session.close()  
 
