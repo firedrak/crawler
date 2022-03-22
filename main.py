@@ -61,9 +61,9 @@ async def fetching():
         if job_left:
             redisClient.incr_process_count()
             asyncio.create_task(push_page(redisClient.redis_pop('job_queue')))
-            await asyncio.sleep(.05)
+            await asyncio.sleep(1)
             redisClient.dicr_process_count() 
-        await asyncio.sleep(1)
+        await asyncio.sleep(.1)
 
     await session.close()  
 
