@@ -50,8 +50,8 @@ class redisCli:
 
 
 def first_job():
-        with httpimport.remote_repo(["template"], url):
-            import template
+    with httpimport.remote_repo(["template"], url):
+        import template
     
     int_job = {'url' : template.STARTING_URL, 'call_back' : 'pars'}
     redisCli().redis_push('job_queue', int_job)
