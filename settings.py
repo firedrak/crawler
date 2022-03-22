@@ -11,6 +11,8 @@ if args:
     redis_host = args[0]
     if args[1]:
         url = args[1]
+        with httpimport.remote_repo(["template"], url):
+            import template
 
 class redisCli:
 
@@ -47,11 +49,12 @@ class redisCli:
 
     def get_process_count(self):
         return self.REDIS_CLI.get('process')
+    
+    def add_visited_url(self):
+        self.REDIS_CLI.
 
 
 def first_job():
-    with httpimport.remote_repo(["template"], url):
-        import template
     int_job = {'url' : template.STARTING_URL, 'call_back' : 'pars'}
     redisCli().redis_push('job_queue', int_job)
     print('initial job added to redis')
