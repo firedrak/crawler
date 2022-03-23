@@ -14,8 +14,6 @@ redisClient = redisCli()
 
 procersses = []
 
-redisClient.start_crawling()
-
 conn = aiohttp.TCPConnector(limit_per_host=100, limit=0, ttl_dns_cache=300)
 
 async def extracting():
