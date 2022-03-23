@@ -51,7 +51,6 @@ class redisCli:
         return self.REDIS_CLI.get('process')
 
 def first_job():
-    redisCli().start_crawling()
     int_job = {'url' : template.STARTING_URL, 'call_back' : 'pars'}
     redisCli().redis_push('job_queue', int_job)
     print('initial job added to redis')
