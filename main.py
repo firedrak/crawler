@@ -2,7 +2,9 @@
 from settings import *
 
 redisClient = redisCli()
-if redisClient.get_status() != 'running': first_job()
+if redisClient.get_status() != 'running':
+    redisClient.start_crawling()
+    first_job()
 
 import asyncio
 import template
