@@ -46,6 +46,7 @@ async def extracting():
 
 async def fetching():
 # Downloading pages and pushing it to redis queue
+
     semaphore = asyncio.Semaphore(50)
     session = aiohttp.ClientSession(connector=conn)
     
@@ -66,7 +67,7 @@ async def fetching():
             asyncio.create_task(push_page(redisClient.redis_pop(f'job_queue_of_{SPIDER_URL}')))
         await asyncio.sleep(1)
 
-#     await session.close()  
+    await session.close()  
 
 async def main():
     
