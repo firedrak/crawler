@@ -50,7 +50,9 @@ class redisCli:
 
     def get_process_count(self):
         return self.REDIS_CLI.get('process')
-
+    
+SPIDER_URL = spider_url
+    
 def first_job():
     int_job = {'url' : template.STARTING_URL, 'call_back' : 'pars'}
     redisCli().redis_push(f'job_queue_of_{spider_url}', int_job)
