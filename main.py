@@ -26,22 +26,22 @@ async def extracting():
         fun_to_call = getattr(template, page['call_back'])
         result = fun_to_call(doc)
         if 'data' in result.keys() and len(result['data']):
-            redisClient.redis_push('data', result['data'])
+            redisClient.redis_push(f'data_of_{SPIDER_URL}', result['data'])
         if 'url' in result.keys() and len(result['url']):
             for job in result['url']:
-                redisClient.redis_push('job_queue', job)
+                redisClient.redis_push(f'job_queue_of_{SPIDER_URL}', job)
 
-    while redisClient.get_status() == 'running':
-        page_left = (redisClient.length_of_queue('page_queue'))
+    while redisClient.get_status(SPIDER_URL) == 'running':
+        page_left = (redisClient.length_of_queue(f'page_queue_of_{SPIDER_URL}'))
         if page_left:
-            redisClient.incr_process_count()
+            redisClient.incr_process_count(SPIDER_URL)
             try:
-                page = redisClient.redis_pop('page_queue')
+                page = redisClient.redis_pop(f'page_queue_of_{SPIDER_URL}')
             except:
                 page = None
             if page:
                 process_page(page)
-            redisClient.dicr_process_count()
+            redisClient.dicr_process_count(SPIDER_URL)
         await asyncio.sleep(.1)
 
 async def fetching():
@@ -55,15 +55,15 @@ async def fetching():
             async with semaphore:
                 async with session.get(url, ssl=False) as response:
                     doc = await response.text()
-                    redisClient.redis_push('page_queue', {'content':doc, 'call_back':job['call_back']})
+                    redisClient.redis_push(f'page_queue_of_{SPIDER_URL}', {'content':doc, 'call_back':job['call_back']})
         except: print('404')
-        redisClient.dicr_process_count()
+        redisClient.dicr_process_count(SPIDER_URL)
             
-    while redisClient.get_status() == 'running':
-        job_left = (redisClient.length_of_queue('job_queue'))
+    while redisClient.get_status(SPIDER_URL) == 'running':
+        job_left = (redisClient.length_of_queue(f'job_queue_of_{SPIDER_URL}'))
         if job_left:
-            redisClient.incr_process_count()
-            asyncio.create_task(push_page(redisClient.redis_pop('job_queue')))
+            redisClient.incr_process_count(SPIDER_URL)
+            asyncio.create_task(push_page(redisClient.redis_pop(f'job_queue_of_{SPIDER_URL}')))
         await asyncio.sleep(1)
 
 #     await session.close()  
@@ -73,7 +73,7 @@ async def main():
     fetching_routine = asyncio.ensure_future(fetching())
     extracting_routine = asyncio.ensure_future(extracting())
     
-    while redisClient.get_status() == 'running':
+    while redisClient.get_status(SPIDER_URL) == 'running':
 
         await asyncio.sleep(1)
         if redisClient.length_of_queue('job_queue') == 0 and redisClient.length_of_queue('page_queue') == 0:
