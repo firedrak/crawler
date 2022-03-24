@@ -17,7 +17,6 @@ else: spider_url = ''
 
 class redisCli:
 
-#     redis_host = '192.168.56.101'
     redis_host = redis_host
     redis_port = 6379
 
