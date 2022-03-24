@@ -53,7 +53,7 @@ class redisCli:
     
 SPIDER_URL = spider_url
     
-def first_job():
+def first_job(spider_url):
     int_job = {'url' : template.STARTING_URL, 'call_back' : 'pars'}
     redisCli().redis_push(f'job_queue_of_{spider_url}', int_job)
     print(f'initial job added to redis for the spider {spider_url}')
