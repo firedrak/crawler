@@ -2,9 +2,9 @@
 from settings import *
 
 redisClient = redisCli()
-if redisClient.get_status() != 'running':
-    redisClient.start_crawling()
-    first_job()
+if redisClient.get_status(SPIDER_URL) != 'running':
+    redisClient.start_crawling(SPIDER_URL)
+    first_job(SPIDER_URL)
 
 import asyncio
 import template
@@ -76,16 +76,16 @@ async def main():
     while redisClient.get_status(SPIDER_URL) == 'running':
 
         await asyncio.sleep(1)
-        if redisClient.length_of_queue('job_queue') == 0 and redisClient.length_of_queue('page_queue') == 0:
+        if redisClient.length_of_queue(f'job_queue_of_{SPIDER_URL}') == 0 and redisClient.length_of_queue(f'page_queue_of_{SPIDER_URL}') == 0:
             await asyncio.sleep(.5)
-            if int(redisClient.get_process_count()) < 1:
-                redisClient.stop_crawling()
+            if int(redisClient.get_process_count(SPIDER_URL)) < 1:
+                redisClient.stop_crawling(SPIDER_URL)
 
-        job_len = redisClient.length_of_queue('job_queue')
-        page_len = redisClient.length_of_queue('page_queue')
-        data_len = redisClient.length_of_queue('data')
-        state = redisClient.get_status()
-        count = redisClient.get_process_count()
+        job_len = redisClient.length_of_queue(f'job_queue_of_{SPIDER_URL}')
+        page_len = redisClient.length_of_queue(f'page_queue_of_{SPIDER_URL}')
+        data_len = redisClient.length_of_queue(f'data_of_{SPIDER_URL}')
+        state = redisClient.get_status(SPIDER_URL)
+        count = redisClient.get_process_count(SPIDER_URL)
         print(f'job_len:{job_len} page_len:{page_len} count:{count} data_len:{data_len} state:{state}')
 
 if __name__ == "__main__":
