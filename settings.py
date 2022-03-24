@@ -13,6 +13,7 @@ if args:
         spider_url = args[1]
         with httpimport.remote_repo(["template"], spider_url):
             import template
+else: spider_url = '' 
 
 class redisCli:
 
@@ -52,5 +53,5 @@ class redisCli:
 
 def first_job():
     int_job = {'url' : template.STARTING_URL, 'call_back' : 'pars'}
-    redisCli().redis_push('job_queue', int_job)
-    print('initial job added to redis')
+    redisCli().redis_push(f'job_queue_of_{spider_url}', int_job)
+    print(f'initial job added to redis for the spider {spider_url}')
