@@ -24,14 +24,14 @@ class redisCli:
     REDIS_CLI = redis.StrictRedis(
         host=redis_host, port=redis_port, decode_responses=True)
 
-    def get_status(self):
-        return self.REDIS_CLI.get('state')
+    def get_status(self, spider_url):
+        return self.REDIS_CLI.get(f'state_of_{spider_url}')
 
-    def start_crawling(self):
-        self.REDIS_CLI.set('state', 'running')
+    def start_crawling(self, spider_url):
+        self.REDIS_CLI.set(f'state_of_{spider_url}', 'running')
 
-    def stop_crawling(self):
-        self.REDIS_CLI.set('state', 'stopped')
+    def stop_crawling(self, spider_url):
+        self.REDIS_CLI.set(f'state_of_{spider_url}', 'stopped')
 
     def length_of_queue(self, key):
         return self.REDIS_CLI.llen(key)
@@ -42,14 +42,14 @@ class redisCli:
     def redis_pop(self, key):
         return json.loads(self.REDIS_CLI.rpop(key))
 
-    def incr_process_count(self):
-        self.REDIS_CLI.incr('process')
+    def incr_process_count(self, spider_url):
+        self.REDIS_CLI.incr(f'process_of_{spider_url}')
 
-    def dicr_process_count(self):
-        self.REDIS_CLI.decr('process')
+    def dicr_process_count(self, spider_url):
+        self.REDIS_CLI.decr(f'process_of_{spider_url}')
 
-    def get_process_count(self):
-        return self.REDIS_CLI.get('process')
+    def get_process_count(self, spider_url):
+        return self.REDIS_CLI.get(f'process_of_{spider_url}')
     
 SPIDER_URL = spider_url
     
