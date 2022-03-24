@@ -10,8 +10,8 @@ args = sys.argv[1:]
 if args:
     redis_host = args[0]
     if args[1]:
-        url = args[1]
-        with httpimport.remote_repo(["template"], url):
+        spider_url = args[1]
+        with httpimport.remote_repo(["template"], spider_url):
             import template
 
 class redisCli:
