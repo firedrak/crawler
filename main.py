@@ -71,6 +71,7 @@ async def fetching():
 
 async def main():
     
+    redisClient.heart_beat(porcess_id, spider_url)
     fetching_routine = asyncio.ensure_future(fetching())
     extracting_routine = asyncio.ensure_future(extracting())
     
