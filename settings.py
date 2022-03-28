@@ -9,10 +9,12 @@ OUT_PUT_FILE_NAME = 'dataCollected.csv'
 args = sys.argv[1:]
 if args:
     redis_host = args[0]
-    if args[1]:
+    if args[2]:
+        porcess_id = args[2]
         spider_url = args[1]
         with httpimport.remote_repo(["template"], spider_url):
             import template
+    
 else: spider_url = '' 
 
 class redisCli:
@@ -22,6 +24,10 @@ class redisCli:
 
     REDIS_CLI = redis.StrictRedis(
         host=redis_host, port=redis_port, decode_responses=True)
+    
+    def heart_beat(porcess_id, spider_url):
+        self.REDIS_CLI.set(f'heart_beat_of_{porcess_id}_{spider_url}', 'am_active!')
+        self.REDIS_CLI.expire(f'heart_beat_of_{porcess_id}_{spider_url}', 5)
 
     def get_status(self, spider_url):
         return self.REDIS_CLI.get(f'state_of_{spider_url}')
