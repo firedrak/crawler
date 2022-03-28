@@ -19,6 +19,7 @@ procersses = []
 conn = aiohttp.TCPConnector(limit_per_host=100, limit=0, ttl_dns_cache=300)
 
 async def extracting():
+    redisClient.heart_beat(porcess_id, spider_url)
 # Processing pages in redis queue for data and urls.
 
     def process_page(page):
@@ -71,7 +72,6 @@ async def fetching():
 
 async def main():
     
-    redisClient.heart_beat(porcess_id, spider_url)
     fetching_routine = asyncio.ensure_future(fetching())
     extracting_routine = asyncio.ensure_future(extracting())
     
