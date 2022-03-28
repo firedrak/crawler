@@ -62,6 +62,7 @@ async def fetching():
         redisClient.dicr_process_count(porcess_id)
             
     while redisClient.get_status(SPIDER_URL) == 'running':
+        redisClient.heart_beat(porcess_id, spider_url)
         job_left = (redisClient.length_of_queue(f'job_queue_of_{SPIDER_URL}'))
         if job_left:
             redisClient.incr_process_count(porcess_id)
