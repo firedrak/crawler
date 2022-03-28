@@ -27,7 +27,7 @@ class redisCli:
     
     def heart_beat(self, porcess_id, spider_url):
         self.REDIS_CLI.set(f'heart_beat_of_{porcess_id}_{spider_url}', 'am_active!')
-#         self.REDIS_CLI.expire(f'heart_beat_of_{porcess_id}_{spider_url}', 3)
+        self.REDIS_CLI.expire(f'heart_beat_of_{porcess_id}_{spider_url}', 10)
 
     def get_status(self, spider_url):
         return self.REDIS_CLI.get(f'state_of_{spider_url}')
