@@ -19,7 +19,6 @@ procersses = []
 conn = aiohttp.TCPConnector(limit_per_host=100, limit=0, ttl_dns_cache=300)
 
 async def extracting():
-    redisClient.heart_beat(porcess_id, spider_url)
 # Processing pages in redis queue for data and urls.
 
     def process_page(page):
@@ -33,6 +32,7 @@ async def extracting():
                 redisClient.redis_push(f'job_queue_of_{SPIDER_URL}', job)
 
     while redisClient.get_status(SPIDER_URL) == 'running':
+        redisClient.heart_beat(porcess_id, spider_url)
         page_left = (redisClient.length_of_queue(f'page_queue_of_{SPIDER_URL}'))
         if page_left:
             redisClient.incr_process_count(SPIDER_URL)
