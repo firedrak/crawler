@@ -35,14 +35,14 @@ async def extracting():
         redisClient.heart_beat(porcess_id, spider_url)
         page_left = (redisClient.length_of_queue(f'page_queue_of_{SPIDER_URL}'))
         if page_left:
-            redisClient.incr_process_count(SPIDER_URL)
+            redisClient.incr_process_count(porcess_id)
             try:
                 page = redisClient.redis_pop(f'page_queue_of_{SPIDER_URL}')
             except:
                 page = None
             if page:
                 process_page(page)
-            redisClient.dicr_process_count(SPIDER_URL)
+            redisClient.dicr_process_count(porcess_id)
         await asyncio.sleep(.1)
 
 async def fetching():
@@ -59,12 +59,12 @@ async def fetching():
                     doc = await response.text()
                     redisClient.redis_push(f'page_queue_of_{SPIDER_URL}', {'content':doc, 'call_back':job['call_back']})
         except: print('404')
-        redisClient.dicr_process_count(SPIDER_URL)
+        redisClient.dicr_process_count(porcess_id)
             
     while redisClient.get_status(SPIDER_URL) == 'running':
         job_left = (redisClient.length_of_queue(f'job_queue_of_{SPIDER_URL}'))
         if job_left:
-            redisClient.incr_process_count(SPIDER_URL)
+            redisClient.incr_process_count(porcess_id)
             asyncio.create_task(push_page(redisClient.redis_pop(f'job_queue_of_{SPIDER_URL}')))
         await asyncio.sleep(1)
 
@@ -80,14 +80,14 @@ async def main():
         await asyncio.sleep(1)
         if redisClient.length_of_queue(f'job_queue_of_{SPIDER_URL}') == 0 and redisClient.length_of_queue(f'page_queue_of_{SPIDER_URL}') == 0:
             await asyncio.sleep(.5)
-            if int(redisClient.get_process_count(SPIDER_URL)) < 1:
+            if int(redisClient.get_process_count(porcess_id)) < 1:
                 redisClient.stop_crawling(SPIDER_URL)
 
         job_len = redisClient.length_of_queue(f'job_queue_of_{SPIDER_URL}')
         page_len = redisClient.length_of_queue(f'page_queue_of_{SPIDER_URL}')
         data_len = redisClient.length_of_queue(f'data_of_{SPIDER_URL}')
         state = redisClient.get_status(SPIDER_URL)
-        count = redisClient.get_process_count(SPIDER_URL)
+        count = redisClient.get_process_count(porcess_id)
         print(f'job_len:{job_len} page_len:{page_len} count:{count} data_len:{data_len} state:{state}')
 
 if __name__ == "__main__":
