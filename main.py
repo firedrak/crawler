@@ -65,7 +65,7 @@ async def fetching():
         if job_left:
             redisClient.incr_process_count(SPIDER_URL)
             asyncio.create_task(push_page(redisClient.redis_pop(f'job_queue_of_{SPIDER_URL}')))
-        else: await asyncio.sleep(1)
+        await asyncio.sleep(1)
 
     await session.close()
 
