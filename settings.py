@@ -24,6 +24,9 @@ class redisCli:
 
     REDIS_CLI = redis.StrictRedis(
         host=redis_host, port=redis_port, decode_responses=True)
+
+    def add_process_heart_beat(porcess_id, spider_url):
+        REDIS_CLI.lpush('heart_beats', f'heart_beat_of_{porcess_id}_{spider_url}')
     
     def heart_beat(self, porcess_id, spider_url):
         self.REDIS_CLI.set(f'heart_beat_of_{porcess_id}_{spider_url}', 'am_active!')
