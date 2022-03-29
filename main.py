@@ -88,7 +88,7 @@ async def main():
         page_len = redisClient.length_of_queue(f'page_queue_of_{SPIDER_URL}')
         data_len = redisClient.length_of_queue(f'data_of_{SPIDER_URL}')
         state = redisClient.get_status(SPIDER_URL)
-        count = redisClient.get_process_count(SPIDER_URL, porcess_id)
+        count = redisClient.get_process_count(porcess_id)
         print(f'job_len:{job_len} page_len:{page_len} count:{count} data_len:{data_len} state:{state}')
 
 if __name__ == "__main__":
