@@ -47,14 +47,14 @@ class redisCli:
     def redis_pop(self, key):
         return json.loads(self.REDIS_CLI.rpop(key))
 
-    def incr_process_count(self, spider_url):
-        self.REDIS_CLI.incr(f'process_of_{spider_url}')
+    def incr_process_count(self, spider_url, porcess_id):
+        self.REDIS_CLI.incr(f'process_of_{spider_url}_{porcess_id}')
 
-    def dicr_process_count(self, spider_url):
-        self.REDIS_CLI.decr(f'process_of_{spider_url}')
+    def dicr_process_count(self, spider_url, porcess_id):
+        self.REDIS_CLI.decr(f'process_of_{spider_url}_{porcess_id}')
 
-    def get_process_count(self, spider_url):
-        return self.REDIS_CLI.get(f'process_of_{spider_url}')
+    def get_process_count(self, spider_url, porcess_id):
+        return self.REDIS_CLI.get(f'process_of_{spider_url}_{porcess_id}')
     
 SPIDER_URL = spider_url
     
